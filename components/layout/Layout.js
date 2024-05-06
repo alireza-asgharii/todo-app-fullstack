@@ -12,7 +12,7 @@ const Layout = ({ children }) => {
             <li>profile</li>
           </ul>
         </aside>
-        <section className="p-3 w-4/6">{children}</section>
+        <section className="p-3 w-5/6">{children}</section>
       </main>
     </div>
   );
