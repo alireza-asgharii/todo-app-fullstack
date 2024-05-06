@@ -15,7 +15,9 @@ const userSchema = new Schema({
   todos: [
     {
       title: String,
-      status: "todo" | "progress" | "review" | "done",
+      status: {
+        type: String,
+      },
       createAt: {
         type: Date,
         default: () => Date.now(),
@@ -34,6 +36,6 @@ const userSchema = new Schema({
   },
 });
 
-const User = models.User || model("user", userSchema);
+const User = models.User || model("User", userSchema);
 
 export default User;
