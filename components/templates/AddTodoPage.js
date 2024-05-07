@@ -10,8 +10,15 @@ const AddTodoPage = () => {
     setRadio(e.target.value);
   };
 
-  const addTodoHandler = () => {
-    console.log({radio, title})
+  const addTodoHandler = async () => {
+    const res = await fetch("/api/todos", {
+      method: "POST",
+      body: JSON.stringify({ title, status: radio }),
+      headers: { "Content-Type": "application/json" },
+    });
+    const data = await res.json();
+
+    console.log(data);
   };
 
   return (
@@ -63,7 +70,12 @@ const AddTodoPage = () => {
           />
         </div>
 
-        <button onClick={addTodoHandler} className="text-white p-1 px-4 my-6 bg-[#1679AB] rounded-md">Add</button>
+        <button
+          onClick={addTodoHandler}
+          className="text-white p-1 px-4 my-6 bg-[#1679AB] rounded-md"
+        >
+          Add
+        </button>
       </div>
     </div>
   );
