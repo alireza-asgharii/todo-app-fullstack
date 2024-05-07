@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "./auth/[...nextauth]";
 import User from "@/models/User";
 import connectDB from "@/utils/connectDB";
+import sortTodo from "@/utils/sortTodos";
 
 export default async function handler(req, res) {
   //connect to DB
@@ -9,7 +10,7 @@ export default async function handler(req, res) {
     await connectDB();
     console.log("connect DB");
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
     return res
       .status(500)
       .json({ status: "failed", message: "error in connecting to DB" });
@@ -46,5 +47,8 @@ export default async function handler(req, res) {
     return res
       .status(201)
       .json({ status: "success", message: "todo was created successfully" });
+  } else if (req.method === "GET") {
+    const sortedTodos = sortTodo(user.todos);
+    res.status(200).json({status: "success", todos: sortedTodos})
   }
 }
