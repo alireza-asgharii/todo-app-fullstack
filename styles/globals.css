@@ -15,3 +15,9 @@
     text-wrap: balance;
   }
 }
+
+@layer components {
+  .active {
+    @apply bg-done  text-white
+  }
+}
