@@ -31,26 +31,8 @@ export default async function handler(req, res) {
       .json({ status: "failed", message: "There is no user" });
   }
 
-  //create todo
-  if (req.method === "POST") {
-    const { title, status } = req.body;
-
-    if (!title || !status) {
-      return res
-        .status(422)
-        .json({ status: "failed", message: "There is no user" });
-    }
-
-    user.todos.push({ title, status });
-    user.save();
-
-    return res
-      .status(201)
-      .json({ status: "success", message: "todo was created successfully" });
-  } else if (req.method === "GET") {
-    const sortedTodos = sortTodo(user.todos);
-    res.status(200).json({ status: "success", todos: sortedTodos });
-  } else if (req.method === "PATCH") {
+  //update todo
+  if (req.method === "PATCH") {
     const { title, status, id } = req.body;
 
     if (!id || !status) {
@@ -60,20 +42,17 @@ export default async function handler(req, res) {
     }
 
     try {
-      await User.updateOne(
-        { "todos._id": id },
-        {
-          $set: {
-            "todos.$.status": status,
-            "todos.$.updateAt": Date.now(),
-          },
-        }
+      const findTodoIndex = user.todos.findIndex(
+        (todo) => todo._id.toString() === id
       );
+      if (title) user.todos[findTodoIndex].title = title;
+      if (status) user.todos[findTodoIndex].status = status;
+      user.todos[findTodoIndex].updateAt = Date.now();
+      await user.save();
 
-      res.status(200).json({
-        status: "success",
-        message: "Todo has been updated",
-      });
+      res
+        .status(200)
+        .json({ status: "success", message: "Todo has been updated" });
     } catch (error) {
       console.log(error.message);
       res.status(200).json({
