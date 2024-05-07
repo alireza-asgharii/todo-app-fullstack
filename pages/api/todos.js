@@ -51,7 +51,7 @@ export default async function handler(req, res) {
     const sortedTodos = sortTodo(user.todos);
     res.status(200).json({ status: "success", todos: sortedTodos });
   } else if (req.method === "PATCH") {
-    const { title, status, id } = req.body;
+    const { status, id } = req.body;
 
     if (!id || !status) {
       return res

@@ -25,6 +25,9 @@ const HomePage = () => {
             color="bg-todo"
             title={todo.title}
             updateAt={todo.updateAt}
+            next="inProgress"
+            fetchTodos={fetchTodos}
+            id={todo._id}
           />
         ))}
       </TodoList>
@@ -36,6 +39,10 @@ const HomePage = () => {
             color="bg-inProgress"
             title={todo.title}
             updateAt={todo.updateAt}
+            prev="todo"
+            next="review"
+            fetchTodos={fetchTodos}
+            id={todo._id}
           />
         ))}
       </TodoList>
@@ -47,6 +54,10 @@ const HomePage = () => {
             color="bg-review"
             title={todo.title}
             updateAt={todo.updateAt}
+            prev="inProgress"
+            next="done"
+            fetchTodos={fetchTodos}
+            id={todo._id}
           />
         ))}
       </TodoList>
@@ -58,6 +69,9 @@ const HomePage = () => {
             color="bg-done"
             title={todo.title}
             updateAt={todo.updateAt}
+            prev="review"
+            fetchTodos={fetchTodos}
+            id={todo._id}
           />
         ))}
       </TodoList>
