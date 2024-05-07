@@ -10,7 +10,7 @@ export default async function handler(req, res) {
     await connectDB();
     console.log("connect DB");
   } catch (error) {
-    res
+    return res
       .status(500)
       .json({ status: "failed", message: "error in connecting to DB" });
   }
@@ -44,9 +44,7 @@ export default async function handler(req, res) {
   try {
     const hashedPassword = await hashPassword(password);
     const newUser = await User.create({ email, password: hashedPassword });
-    res
-      .status(201)
-      .json({ status: "success", message: "User was created" });
+    res.status(201).json({ status: "success", message: "User was created" });
   } catch (error) {
     console.log(error.message);
     res
