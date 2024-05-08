@@ -33,9 +33,9 @@ export default async function handler(req, res) {
 
   //update todo
   if (req.method === "PATCH") {
-    const { title, status, id } = req.body;
+    const { title, status, description, id } = req.body;
 
-    if (!id || !status) {
+    if (!id || !status || !title) {
       return res
         .status(422)
         .json({ status: "failed", message: "Invalid data" });
@@ -47,6 +47,7 @@ export default async function handler(req, res) {
       );
       if (title) user.todos[findTodoIndex].title = title;
       if (status) user.todos[findTodoIndex].status = status;
+      if (description) user.todos[findTodoIndex].description = description;
       user.todos[findTodoIndex].updateAt = Date.now();
       await user.save();
 
