@@ -1,6 +1,8 @@
 import { FaRegEdit } from "react-icons/fa";
 import RadioButtomsModal from "./RadioButtomsModal";
 import { useState } from "react";
+import { useUpdatetodo } from "@/hooks/useTodosQuery";
+import Spiner from "./Spiner";
 
 const EditModal = ({
   defaultTitle,
@@ -16,6 +18,8 @@ const EditModal = ({
     status: status,
   });
 
+  const { mutate, isPending } = useUpdatetodo();
+
   const changeHandler = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
@@ -28,16 +32,16 @@ const EditModal = ({
 
   const saveHandler = async (e) => {
     e.preventDefault();
-    const res = await fetch("api/update-todo-v2", {
-      method: "PATCH",
-      body: JSON.stringify({ ...form, id }),
-      headers: { "Content-Type": "application/json" },
-    });
-    const data = await res.json();
-    if (data.status === "success") {
-      await fetchTodos();
-      setModal(false);
-    }
+
+    mutate(
+      { ...form, id },
+      {
+        onSuccess: () => {
+          fetchTodos();
+          setModal(false);
+        },
+      }
+    );
   };
 
   return (
@@ -65,7 +69,7 @@ const EditModal = ({
             placeholder="Description"
             className="px-2 py-1 rounded-md outline-none border-2 my-2 resize-none"
           />
-          
+
           <RadioButtomsModal
             status={form.status}
             changeHandler={changeHandler}
@@ -73,10 +77,12 @@ const EditModal = ({
 
           <div className="text-right">
             <button
+              disabled={isPending}
               type="submit"
-              className="px-2 py-1 w-20 font-bold bg-green-600 text-white rounded-md text-sm cursor-default md:cursor-pointer my-3 mt-8"
+              className={`disabled:cursor-not-allowed disabled:opacity-[.7] px-2 py-1 w-16 font-bold bg-green-600 text-white rounded-md text-sm cursor-default md:cursor-pointer my-3 mt-8`}
             >
-              Save
+              {isPending && <Spiner />}
+              <span>Save</span>
             </button>
           </div>
         </form>

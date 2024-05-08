@@ -3,14 +3,18 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 
 import { signupValidate } from "@/utils/validate";
+import { useSignUp } from "@/hooks/useAuth";
+import toast from "react-hot-toast";
+import Spiner from "../modules/Spiner";
 
 const SignupPage = () => {
-  const router = useRouter()
+  const router = useRouter();
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
   const [error, setError] = useState(signupValidate(form));
+  const { isPending, mutate } = useSignUp();
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
@@ -25,24 +29,17 @@ const SignupPage = () => {
     e.preventDefault();
 
     if (Object.keys(error).length !== 0) {
-      console.log("Invalid data");
+      toast.error("Invalid data!");
       return;
     }
 
-    try {
-      const res = await fetch("/api/auth/signup", {
-        method: "POST",
-        body: JSON.stringify(form),
-        headers: { "Content-Type": "application/json" },
-      });
-      const data = await res.json();
-      
-      console.log(data);
-      if (data.status === "success") router.push('/auth/signin')
-
-    } catch (error) {
-      console.log(error);
-    }
+    mutate(form, {
+      onSuccess: () => {
+        toast.success("Registration was successful");
+        router.push("/auth/signin");
+      },
+      onError: (e) => toast.error(e.response.data.message),
+    });
   };
 
   return (
@@ -67,14 +64,16 @@ const SignupPage = () => {
             placeholder="password"
           />
           <button
-            className="mt-5 bg-[#66BFBF] rounded-md px-2 py-1 text-white "
+            disabled={isPending}
+            className="mt-5 w-24 bg-[#66BFBF] rounded-md px-2 py-1 text-white disabled:opacity-[.8] cursor-default md:cursor-pointer disabled:cursor-not-allowed transition-all text-sm"
             type="submit"
           >
-            Register
+            {isPending && <Spiner />}
+            <span>Register</span>
           </button>
         </div>
 
-        <div className="text-center pt-6  text-sm">
+        <div className="text-center pt-6  text-xs">
           <span className="text-gray-500 pr-3">Have a account?</span>
           <Link href="/auth/signin" className="text-[#10439F]">
             Sign in

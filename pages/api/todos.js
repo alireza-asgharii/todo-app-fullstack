@@ -38,7 +38,7 @@ export default async function handler(req, res) {
     if (!title || !status) {
       return res
         .status(422)
-        .json({ status: "failed", message: "There is no user" });
+        .json({ status: "failed", message: "Invalid data" });
     }
 
     user.todos.push({ title, status, description });

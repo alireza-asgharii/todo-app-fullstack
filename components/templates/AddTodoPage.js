@@ -1,25 +1,33 @@
 import { useState } from "react";
 import { LuListTodo } from "react-icons/lu";
 import RadioButton from "../modules/RadioButton";
+import { useAddTodo } from "@/hooks/useTodosQuery";
+import toast from "react-hot-toast";
+import Spiner from "../modules/Spiner";
 
 const AddTodoPage = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [radio, setRadio] = useState("todo");
+  const { isPending, mutate } = useAddTodo();
 
   const radioChangeHandler = (e) => {
     setRadio(e.target.value);
   };
 
   const addTodoHandler = async () => {
-    const res = await fetch("/api/todos", {
-      method: "POST",
-      body: JSON.stringify({ title, status: radio, description }),
-      headers: { "Content-Type": "application/json" },
-    });
-    const data = await res.json();
-
-    console.log(data);
+    mutate(
+      { title, status: radio, description },
+      {
+        onSuccess: () => {
+          toast.success("Todo added successfully");
+          setTitle("");
+          setDescription("");
+          setRadio('todo');
+        },
+        onError: (e) => toast.error(e.response.data.message),
+      }
+    );
   };
 
   return (
@@ -81,10 +89,12 @@ const AddTodoPage = () => {
         </div>
 
         <button
+          disabled={isPending}
           onClick={addTodoHandler}
-          className="text-white p-1 px-4 my-6 bg-[#1679AB] rounded-md"
+          className="text-white p-1 px-2 w-16 my-6 bg-[#1679AB] rounded-md cursor-default md:cursor-pointer disabled:cursor-not-allowed disabled:opacity-[.7]"
         >
-          Add
+          {isPending && <Spiner />}
+          <span className="text-sm">Add</span>
         </button>
       </div>
     </div>

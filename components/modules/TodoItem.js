@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 
 import { FaRegEdit } from "react-icons/fa";
 import EditModal from "./EditModal";
+import { useUpdateStatus } from "@/hooks/useTodosQuery";
+import Spiner from "./Spiner";
 
 const TodoItem = ({
   title,
@@ -16,6 +18,7 @@ const TodoItem = ({
   status,
 }) => {
   const [modal, setModal] = useState(false);
+  const { isPending, mutate } = useUpdateStatus();
 
   useEffect(() => {
     if (modal) {
@@ -31,16 +34,12 @@ const TodoItem = ({
   });
 
   const updateHandler = async (id, status) => {
-    console.log({ next, id });
-
-    const res = await fetch("/api/todos", {
-      method: "PATCH",
-      body: JSON.stringify({ id, status }),
-      headers: { "Content-Type": "application/json" },
-    });
-    const data = await res.json();
-
-    if (data.status === "success") fetchTodos();
+    mutate(
+      { id, status },
+      {
+        onSuccess: () => fetchTodos(),
+      }
+    );
   };
 
   const editButtonHandler = () => {
@@ -67,7 +66,9 @@ const TodoItem = ({
         <FaRegEdit />
       </span>
       <span className={`w-1/2 h-[3px] mb-3 rounded-md ${color} block`}></span>
-      <p className="font-bold">{title}</p>
+      <p className="font-bold">
+        {title} {isPending && <Spiner />}
+      </p>
       <p className="text-right text-xs pt-10 text-gray-400 flex justify-between">
         <span>last update:</span>
         {dateFormat(updateAt)} Tehran time
@@ -77,9 +78,10 @@ const TodoItem = ({
           {prev && (
             <button
               onClick={() => updateHandler(id, prev)}
-              className="rounded-md  bg-[#FF9800] text-white px-2 py-1"
+              className="transition-colors rounded-md bg-[#FF9800] text-white px-2 py-1 flex items-center justify-center disabled:cursor-not-allowed disabled:opacity-[.8]"
+              disabled={isPending}
             >
-              Prev
+              <span>Prev</span>
             </button>
           )}
         </div>
@@ -87,7 +89,8 @@ const TodoItem = ({
           {next && (
             <button
               onClick={() => updateHandler(id, next)}
-              className="rounded-md bg-[#2C7865] text-white px-2 py-1 "
+              disabled={isPending}
+              className="transition-colors rounded-md bg-[#2C7865] text-white px-2 py-1 disabled:cursor-not-allowed disabled:opacity-[.8]"
             >
               Next
             </button>

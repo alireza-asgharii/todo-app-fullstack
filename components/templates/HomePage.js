@@ -1,25 +1,16 @@
-import { useEffect, useState } from "react";
 import TodoList from "../modules/TodoList";
 import TodoItem from "../modules/TodoItem";
+import useTodosQuery from "@/hooks/useTodosQuery";
 
 const HomePage = () => {
-  const [todos, setTodos] = useState([]);
-  console.log(todos);
+  const { data, isLoading, error, refetch } = useTodosQuery();
 
-  const fetchTodos = async () => {
-    const res = await fetch("api/todos");
-    const data = await res.json();
-
-    if (data.status === "success") setTodos(data.todos);
-  };
-  useEffect(() => {
-    fetchTodos();
-  }, []);
-
+  if (isLoading) return <h2>loading...</h2>;
+  if (error) return <h2>Error</h2>;
   return (
     <div className=" justify-around md:flex">
       <TodoList name="Todo" color="bg-todo">
-        {todos?.todo?.map((todo) => (
+        {data?.data.todos?.todo?.map((todo) => (
           <TodoItem
             key={todo._id}
             color="bg-todo"
@@ -28,14 +19,14 @@ const HomePage = () => {
             status={todo.status}
             updateAt={todo.updateAt}
             next="inProgress"
-            fetchTodos={fetchTodos}
+            fetchTodos={refetch}
             id={todo._id}
           />
         ))}
       </TodoList>
 
       <TodoList name="In Progress" color="bg-inProgress">
-        {todos?.inProgress?.map((todo) => (
+        {data?.data.todos?.inProgress?.map((todo) => (
           <TodoItem
             key={todo._id}
             color="bg-inProgress"
@@ -45,14 +36,14 @@ const HomePage = () => {
             updateAt={todo.updateAt}
             prev="todo"
             next="review"
-            fetchTodos={fetchTodos}
+            fetchTodos={refetch}
             id={todo._id}
           />
         ))}
       </TodoList>
 
       <TodoList name="Review" color="bg-review">
-        {todos?.review?.map((todo) => (
+        {data?.data.todos?.review?.map((todo) => (
           <TodoItem
             key={todo._id}
             color="bg-review"
@@ -62,14 +53,14 @@ const HomePage = () => {
             updateAt={todo.updateAt}
             prev="inProgress"
             next="done"
-            fetchTodos={fetchTodos}
+            fetchTodos={refetch}
             id={todo._id}
           />
         ))}
       </TodoList>
 
       <TodoList name="Done" color="bg-done">
-        {todos?.done?.map((todo) => (
+        {data?.data.todos?.done?.map((todo) => (
           <TodoItem
             key={todo._id}
             color="bg-done"
@@ -78,7 +69,7 @@ const HomePage = () => {
             status={todo.status}
             updateAt={todo.updateAt}
             prev="review"
-            fetchTodos={fetchTodos}
+            fetchTodos={refetch}
             id={todo._id}
           />
         ))}

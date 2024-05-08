@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Form from "../modules/Form";
 import { signupValidate } from "@/utils/validate";
 import { signIn } from "next-auth/react";
+import toast from "react-hot-toast";
 
 const SigninPage = () => {
   const [form, setForm] = useState({
@@ -9,6 +10,7 @@ const SigninPage = () => {
     password: "",
   });
   const [error, setError] = useState(signupValidate(form));
+  const [isLoading, setLoading] = useState(false);
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
@@ -22,11 +24,14 @@ const SigninPage = () => {
   const signInHandler = async (e) => {
     e.preventDefault();
 
+    setLoading(true);
     const data = await signIn("credentials", {
       ...form,
       redirect: false,
     });
-    console.log(data);
+    if (!data.error) toast.success("Login was successful");
+    if (data.error) toast.error(data.error);
+    setLoading(false);
   };
   return (
     <Form
@@ -34,6 +39,7 @@ const SigninPage = () => {
       other="Sign Up"
       changeHandler={changeHandler}
       signHandler={signInHandler}
+      isLoading={isLoading}
     />
   );
 };
