@@ -52,5 +52,27 @@ export default async function handler(req, res) {
         .status(500)
         .json({ status: "failed", message: "error in updating in DB" });
     }
+  } else if (req.method === "GET") {
+    try {
+      const user = await User.findOne({ email: session.user.email });
+      console.log(user);
+
+      if (!user) {
+        return res
+          .status(404)
+          .json({ status: "failed", message: "User not found" });
+      }
+
+      res.status(200).json({
+        status: "success",
+        data: { name: user.name, email: user.email },
+      });
+    } catch (error) {
+      console.log(error.message);
+      res.status(500).json({
+        status: "failed",
+        message: "error in get data from DB",
+      });
+    }
   }
 }
