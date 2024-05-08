@@ -7,7 +7,7 @@ const Layout = ({ children }) => {
       <Header />
       <main className=" flex items-start  bg-[#EEF7FF] min-h-screen">
         <Sidebar />
-        <section className="p-3 w-5/6">{children}</section>
+        <section className="p-3 md:w-5/6 w-full">{children}</section>
       </main>
     </div>
   );

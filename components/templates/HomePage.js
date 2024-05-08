@@ -17,7 +17,7 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className="flex justify-around ">
+    <div className=" justify-around md:flex">
       <TodoList name="Todo" color="bg-todo">
         {todos?.todo?.map((todo) => (
           <TodoItem
