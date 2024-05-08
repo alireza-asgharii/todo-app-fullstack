@@ -1,6 +1,35 @@
 import { dateFormat } from "@/utils/dateFormat";
+import { useEffect, useState } from "react";
 
-const TodoItem = ({ title, color, updateAt, next, prev, id, fetchTodos }) => {
+import { FaRegEdit } from "react-icons/fa";
+import EditModal from "./EditModal";
+
+const TodoItem = ({
+  title,
+  color,
+  updateAt,
+  next,
+  prev,
+  id,
+  fetchTodos,
+  description,
+  status,
+}) => {
+  const [modal, setModal] = useState(false);
+
+  useEffect(() => {
+    if (modal) {
+      document.documentElement.style.overflow = "hidden";
+    } else {
+      document.documentElement.style.overflow = "auto";
+    }
+  }, [modal]);
+
+  document.addEventListener("keydown", (e) => {
+    const key = e.key;
+    if (key === "Escape") setModal(false);
+  });
+
   const updateHandler = async (id, status) => {
     console.log({ next, id });
 
@@ -14,8 +43,29 @@ const TodoItem = ({ title, color, updateAt, next, prev, id, fetchTodos }) => {
     if (data.status === "success") fetchTodos();
   };
 
+  const editButtonHandler = () => {
+    setModal(true);
+  };
+
   return (
-    <div className=" shadow-md px-2 py-3 rounded-md my-5">
+    <div className=" shadow-md px-2 py-3 rounded-md my-5 relative">
+      {modal && (
+        <EditModal
+          defaultTitle={title}
+          defaultDescription={description}
+          id={id}
+          status={status}
+          setModal={setModal}
+          fetchTodos={fetchTodos}
+        />
+      )}
+      <span
+        onClick={editButtonHandler}
+        title="edit todo"
+        className="absolute top-1 right-1 opacity-[.6] md:cursor-pointer"
+      >
+        <FaRegEdit />
+      </span>
       <span className={`w-1/2 h-[3px] mb-3 rounded-md ${color} block`}></span>
       <p className="font-bold">{title}</p>
       <p className="text-right text-xs pt-10 text-gray-400 flex justify-between">

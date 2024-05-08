@@ -24,6 +24,8 @@ const HomePage = () => {
             key={todo._id}
             color="bg-todo"
             title={todo.title}
+            description={todo.description}
+            status={todo.status}
             updateAt={todo.updateAt}
             next="inProgress"
             fetchTodos={fetchTodos}
@@ -38,6 +40,8 @@ const HomePage = () => {
             key={todo._id}
             color="bg-inProgress"
             title={todo.title}
+            description={todo.description}
+            status={todo.status}
             updateAt={todo.updateAt}
             prev="todo"
             next="review"
@@ -53,6 +57,8 @@ const HomePage = () => {
             key={todo._id}
             color="bg-review"
             title={todo.title}
+            description={todo.description}
+            status={todo.status}
             updateAt={todo.updateAt}
             prev="inProgress"
             next="done"
@@ -68,6 +74,8 @@ const HomePage = () => {
             key={todo._id}
             color="bg-done"
             title={todo.title}
+            description={todo.description}
+            status={todo.status}
             updateAt={todo.updateAt}
             prev="review"
             fetchTodos={fetchTodos}
