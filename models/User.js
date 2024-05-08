@@ -18,6 +18,7 @@ const userSchema = new Schema({
       status: {
         type: String,
       },
+      description: String,
       createAt: {
         type: Date,
         default: () => Date.now(),
