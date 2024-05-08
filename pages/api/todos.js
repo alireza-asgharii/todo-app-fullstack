@@ -33,7 +33,7 @@ export default async function handler(req, res) {
 
   //create todo
   if (req.method === "POST") {
-    const { title, status } = req.body;
+    const { title, status, description } = req.body;
 
     if (!title || !status) {
       return res
@@ -41,7 +41,7 @@ export default async function handler(req, res) {
         .json({ status: "failed", message: "There is no user" });
     }
 
-    user.todos.push({ title, status });
+    user.todos.push({ title, status, description });
     user.save();
 
     return res
