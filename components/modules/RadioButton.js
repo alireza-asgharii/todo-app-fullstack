@@ -9,7 +9,7 @@ const RadioButton = ({
   return (
     <label
       htmlFor={name}
-      className={`p-2 bg-[${theme}] min-w-[120px] max-w-[140px] rounded-md flex justify-between my-2 md:cursor-pointer [&[id=""]]`}
+      className={`p-2 ${theme} min-w-[120px] max-w-[140px] rounded-md flex justify-between my-2 md:cursor-pointer [&[id=""]]`}
     >
       <span className="flex items-center">
         {icon} <span className="px-1">{title}</span>

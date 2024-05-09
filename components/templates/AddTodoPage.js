@@ -60,7 +60,7 @@ const AddTodoPage = () => {
             rdaioState={radio}
             radioChangeHandler={radioChangeHandler}
             icon={<LuListTodo />}
-            theme="#1679AB"
+            theme="bg-todo"
           />
           <RadioButton
             name="inProgress"
@@ -68,7 +68,7 @@ const AddTodoPage = () => {
             rdaioState={radio}
             radioChangeHandler={radioChangeHandler}
             icon={<LuListTodo />}
-            theme="#1679AB"
+            theme="bg-inProgress"
           />
           <RadioButton
             name="review"
@@ -76,7 +76,7 @@ const AddTodoPage = () => {
             rdaioState={radio}
             radioChangeHandler={radioChangeHandler}
             icon={<LuListTodo />}
-            theme="#1679AB"
+            theme="bg-review"
           />
           <RadioButton
             name="done"
@@ -84,7 +84,7 @@ const AddTodoPage = () => {
             rdaioState={radio}
             radioChangeHandler={radioChangeHandler}
             icon={<LuListTodo />}
-            theme="#535C91"
+            theme="bg-done"
           />
         </div>
 
