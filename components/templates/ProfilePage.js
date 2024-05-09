@@ -26,7 +26,7 @@ const ProfilePage = () => {
       <h4>Your Email: {email}</h4>
       {fullName && <h4>Your Name: {fullName}</h4>}
 
-      {!fullName && (
+      {!fullName && !isLoading && (
         <ProfileForm
           name={name}
           setName={setName}
