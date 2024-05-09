@@ -1,3 +1,4 @@
+import { MdClose } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 import RadioButtomsModal from "./RadioButtomsModal";
 import { useState } from "react";
@@ -46,7 +47,13 @@ const EditModal = ({
 
   return (
     <div className="fixed top-0 bottom-0 right-0 left-0 flex justify-center items-center min-w-screen min-h-screen z-10 backdrop-blur-[2px]">
-      <div className="bg-white border-2 p-3 rounded-md  w-80">
+      <div className="bg-white border-2 p-3 rounded-md  w-80 relative">
+        <span
+          onClick={() => setModal(false)}
+          className="absolute top-3 right-2 text-red-600 md:cursor-pointer border-2 border-transparent hover:border-red-600 rounded-md transition-colors"
+        >
+          <MdClose />
+        </span>
         <h4 className="font-bold flex justify-start items-center">
           <span className="pr-3">Edit Todo</span> <FaRegEdit />
         </h4>
